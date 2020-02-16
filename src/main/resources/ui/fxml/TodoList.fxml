@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.todolist.controller.TodoListController"
+            stylesheets="@../css/app.css">
+    <top>
+        <HBox spacing="10.0">
+            <TextField fx:id="input" layoutX="35.0" layoutY="64.0" prefWidth="431.0" promptText="Enter todo task" HBox.hgrow="ALWAYS" onAction="#addTask"/>
+            <Button layoutX="216.0" layoutY="107.0" mnemonicParsing="false" onAction="#addTask" prefHeight="27.0" prefWidth="70.0" text="Add" HBox.hgrow="ALWAYS" />
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </HBox>
+    </top>
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="todoItemList" prefHeight="200.0" prefWidth="500.0" spacing="20.0">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
