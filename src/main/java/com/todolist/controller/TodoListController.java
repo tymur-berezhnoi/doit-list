@@ -3,15 +3,16 @@ package com.todolist.controller;
 import com.todolist.config.DataSourceManager;
 import com.todolist.dao.TodoTaskDAO;
 import com.todolist.dao.impl.DataBaseTodoTaskDAO;
-import com.todolist.dao.impl.InMemoryTodoTaskDAO;
 import com.todolist.entity.TodoTask;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.Separator;
@@ -21,11 +22,12 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-import javax.sql.DataSource;
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,13 +54,13 @@ public class TodoListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Set<TodoTask> tasks = taskDAO.findAll();
-        tasks.forEach(this::generateViewRow);
+        var tasks = taskDAO.findAll();
+        // tasks.forEach(this::generateViewRow);
     }
 
     @FXML
-    public void addTask() {
-        String text = input.getText().trim();
+    public void addTask() throws IOException {
+        var text = input.getText().trim();
 
         if(text.isEmpty() || text.isBlank()) {
             input.clear();
@@ -68,7 +70,10 @@ public class TodoListController implements Initializable {
 
         TodoTask todoTask = new TodoTask(text, LocalDateTime.now());
         taskDAO.save(todoTask);
-        generateViewRow(todoTask);
+        // generateViewRow(todoTask);
+
+        var view = FXMLLoader.load(getClass().getResource("/ui/fxml/test.fxml"));
+        todoItemList.getChildren().add((Node) view);
 
         input.clear();
     }
@@ -85,8 +90,26 @@ public class TodoListController implements Initializable {
         textInputDialog.setGraphic(null);
         textInputDialog.setResizable(true);
 
-        Button editButton = new Button("Edit");
-        editButton.setOnAction(actionEvent -> {
+        FontAwesomeIconView deleteButton = new FontAwesomeIconView(FontAwesomeIcon.TRASH_ALT);
+
+        deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setSize("20");
+        deleteButton.setFill(Paint.valueOf("#f15b5b"));
+        deleteButton.setOpacity(0.75);
+        deleteButton.setOnMouseEntered(mouseEvent -> deleteButton.setOpacity(1));
+        deleteButton.setOnMouseExited(mouseEvent -> deleteButton.setOpacity(0.75));
+
+        deleteButton.setVisible(false);
+        deleteButton.setOnMouseClicked(actionEvent -> {
+            taskDAO.deleteById(todoTask.getId());
+            todoItemList.getChildren().remove(deleteButton.getParent());
+        });
+
+        FontAwesomeIconView editButton = new FontAwesomeIconView(FontAwesomeIcon.PENCIL);
+        editButton.setVisible(false);
+        editButton.setCursor(Cursor.HAND);
+        editButton.setSize("20");
+        editButton.setOnMouseClicked(actionEvent -> {
             final Optional<String> text = textInputDialog.showAndWait();
             text.ifPresent(s -> {
                 TextField textField = textInputDialog.getEditor();
@@ -96,11 +119,6 @@ public class TodoListController implements Initializable {
                 label.setText(desc);
                 label.getTooltip().setText(desc + "\n----------------------------\nCREATED AT: " + todoTask.getCreatedAt().format(DATE_TIME_FORMATTER));
             });
-        });
-        Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(actionEvent -> {
-            taskDAO.deleteById(todoTask.getId());
-            todoItemList.getChildren().remove(deleteButton.getParent());
         });
 
         Separator separator = new Separator();
@@ -112,6 +130,15 @@ public class TodoListController implements Initializable {
         HBox.setHgrow(deleteButton, Priority.ALWAYS);
 
         HBox hBox = buildHBox(label, separator, editButton, deleteButton);
+
+        hBox.setOnMouseEntered(mouseEvent -> {
+            deleteButton.setVisible(true);
+            editButton.setVisible(true);
+        });
+        hBox.setOnMouseExited(mouseEvent -> {
+            deleteButton.setVisible(false);
+            editButton.setVisible(false);
+        });
 
         todoItemList.getChildren().add(hBox);
     }

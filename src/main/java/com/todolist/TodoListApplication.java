@@ -16,7 +16,7 @@ public class TodoListApplication extends Application {
         var view = FXMLLoader.load(getClass().getResource("/ui/fxml/TodoList.fxml"));
 
         primaryStage.setScene(new Scene((Parent) view));
-        primaryStage.setTitle("TODO LIST");
+        primaryStage.setTitle("DO-IT LIST");
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(500);
         primaryStage.centerOnScreen();
