@@ -6,19 +6,19 @@ import java.util.Objects;
 /**
  * @author Tymur Berezhnoi
  */
-public class TodoTask {
+public class TodoItem {
 
     private long id;
     private String description;
     private final LocalDateTime createdAt;
 
-    public TodoTask(long id, String description, LocalDateTime createdAt) {
+    public TodoItem(long id, String description, LocalDateTime createdAt) {
         this.id = id;
         this.description = description;
         this.createdAt = createdAt;
     }
 
-    public TodoTask(String description, LocalDateTime createdAt) {
+    public TodoItem(String description, LocalDateTime createdAt) {
         this.description = description;
         this.createdAt = createdAt;
     }
@@ -47,8 +47,8 @@ public class TodoTask {
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        TodoTask todoTask = (TodoTask) o;
-        return description.equals(todoTask.description);
+        TodoItem todoItem = (TodoItem) o;
+        return description.equals(todoItem.description);
     }
 
     @Override

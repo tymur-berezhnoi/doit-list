@@ -6,7 +6,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+
+<?import com.todolist.component.TodoItemsVBox?>
 
 <BorderPane prefHeight="600" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.todolist.controller.TodoListController"
             stylesheets="@../css/app.css">
@@ -21,11 +22,11 @@
     </top>
     <center>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <VBox fx:id="todoItemList" prefHeight="200.0" prefWidth="500.0" spacing="20.0">
+            <TodoItemsVBox todoItems="${controller.todoItems}" prefHeight="200.0" prefWidth="500.0" spacing="20.0">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-            </VBox>
+            </TodoItemsVBox>
         </ScrollPane>
     </center>
 </BorderPane>
