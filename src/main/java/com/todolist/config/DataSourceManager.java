@@ -21,8 +21,8 @@ public final class DataSourceManager {
         try {
             FlywayManager.migrate();
 
-            Properties appProperties = applicationProperties();
-            JdbcDataSource h2DataSource = new JdbcDataSource();
+            var appProperties = applicationProperties();
+            var h2DataSource = new JdbcDataSource();
             h2DataSource.setURL(appProperties.getProperty("database.url"));
             h2DataSource.setUser(appProperties.getProperty("database.user"));
             h2DataSource.setPassword(appProperties.getProperty("database.password"));
@@ -64,9 +64,9 @@ public final class DataSourceManager {
          * Execute migration.
          */
         private static void migrate() throws IOException {
-            Properties appProperties = applicationProperties();
+            var appProperties = applicationProperties();
 
-            Flyway flyway = Flyway.configure().dataSource(
+            var flyway = Flyway.configure().dataSource(
                         appProperties.getProperty("database.url"),
                         appProperties.getProperty("database.user"),
                         appProperties.getProperty("database.password"))
@@ -79,8 +79,8 @@ public final class DataSourceManager {
     }
 
     private static Properties applicationProperties() throws IOException {
-        Properties appProperties = new Properties();
-        InputStream resourceAsStream = DataSourceManager.class.getClassLoader().getResourceAsStream("application.properties");
+        var appProperties = new Properties();
+        var resourceAsStream = DataSourceManager.class.getClassLoader().getResourceAsStream("application.properties");
 
         appProperties.load(requireNonNull(resourceAsStream, "File application.properties not found!"));
         return appProperties;

@@ -47,7 +47,7 @@ public class TodoItem {
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        TodoItem todoItem = (TodoItem) o;
+        var todoItem = (TodoItem) o;
         return description.equals(todoItem.description);
     }
 

@@ -29,15 +29,15 @@ public class DataBaseTodoItemDAO implements TodoItemDAO {
 
     @Override
     public void save(TodoItem todoItem) {
-        try(Connection connection = dataSource.getConnection()) {
-            String insertSql = "INSERT INTO TODO_ITEM (DESCRIPTION, CREATED_AT) VALUES (?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+        try(var connection = dataSource.getConnection()) {
+            var insertSql = "INSERT INTO TODO_ITEM (DESCRIPTION, CREATED_AT) VALUES (?, ?);";
+            var preparedStatement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, todoItem.getDescription());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(todoItem.getCreatedAt()));
             preparedStatement.execute();
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                long id = generatedKeys.getLong("ID");
+                var id = generatedKeys.getLong("ID");
                 todoItem.setId(id);
             }
         } catch(SQLException e) {
@@ -47,16 +47,16 @@ public class DataBaseTodoItemDAO implements TodoItemDAO {
 
     @Override
     public Set<TodoItem> findAll() {
-        try(Connection connection = dataSource.getConnection()) {
-            String insertSql = "SELECT * FROM TODO_ITEM;";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(insertSql);
+        try(var connection = dataSource.getConnection()) {
+            var insertSql = "SELECT * FROM TODO_ITEM;";
+            var statement = connection.createStatement();
+            var resultSet = statement.executeQuery(insertSql);
             Set<TodoItem> tasks = new HashSet<>();
 
             while(resultSet.next()) {
-                long id = resultSet.getLong("ID");
-                String description = resultSet.getString("DESCRIPTION");
-                LocalDateTime createdAt = resultSet.getTimestamp("CREATED_AT").toLocalDateTime();
+                var id = resultSet.getLong("ID");
+                var description = resultSet.getString("DESCRIPTION");
+                var createdAt = resultSet.getTimestamp("CREATED_AT").toLocalDateTime();
                 tasks.add(new TodoItem(id, description, createdAt));
             }
             return tasks;
@@ -68,8 +68,8 @@ public class DataBaseTodoItemDAO implements TodoItemDAO {
 
     @Override
     public void deleteById(long id) {
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM TODO_ITEM WHERE ID = ?;");
+        try (var connection = dataSource.getConnection()) {
+            var statement = connection.prepareStatement("DELETE FROM TODO_ITEM WHERE ID = ?;");
             statement.setLong(1, id);
             statement.execute();
         } catch(SQLException e) {
@@ -79,8 +79,8 @@ public class DataBaseTodoItemDAO implements TodoItemDAO {
 
     @Override
     public void update(TodoItem todoItem) {
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE TODO_ITEM SET DESCRIPTION = ? WHERE ID = ?;");
+        try (var connection = dataSource.getConnection()) {
+            var statement = connection.prepareStatement("UPDATE TODO_ITEM SET DESCRIPTION = ? WHERE ID = ?;");
             statement.setString(1, todoItem.getDescription());
             statement.setLong(2, todoItem.getId());
             statement.execute();

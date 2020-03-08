@@ -50,7 +50,7 @@ public class TodoListController implements Initializable {
             return;
         }
 
-        TodoItem todoItem = new TodoItem(text, now());
+        var todoItem = new TodoItem(text, now());
         taskDAO.save(todoItem);
         todoItems.add(todoItem);
         input.clear();
