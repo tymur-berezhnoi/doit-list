@@ -3,6 +3,8 @@ package com.todolist.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static com.todolist.entity.TodoItem.Status.NEW;
+
 /**
  * @author Tymur Berezhnoi
  */
@@ -11,11 +13,22 @@ public class TodoItem {
     private long id;
     private String description;
     private final LocalDateTime createdAt;
+    private Status status = NEW;
+
+    public enum Status {
+        NEW,
+        DONE
+    }
 
     public TodoItem(long id, String description, LocalDateTime createdAt) {
+        this(id, description, createdAt, NEW);
+    }
+
+    public TodoItem(long id, String description, LocalDateTime createdAt, Status status) {
         this.id = id;
         this.description = description;
         this.createdAt = createdAt;
+        this.status = status;
     }
 
     public TodoItem(String description, LocalDateTime createdAt) {
@@ -43,10 +56,22 @@ public class TodoItem {
         return id;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
         var todoItem = (TodoItem) o;
         return description.equals(todoItem.description);
     }

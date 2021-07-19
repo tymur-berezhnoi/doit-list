@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author Tymur Berezhnoi
  */
@@ -13,7 +15,7 @@ public class TodoListApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        var view = FXMLLoader.load(getClass().getResource("/ui/fxml/TodoList.fxml"));
+        var view = FXMLLoader.load(requireNonNull(getClass().getResource("/ui/fxml/TodoList.fxml")));
 
         primaryStage.setScene(new Scene((Parent) view));
         primaryStage.setTitle("DO-IT LIST");

@@ -4,13 +4,9 @@ import com.todolist.dao.TodoItemDAO;
 import com.todolist.entity.TodoItem;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,13 +47,14 @@ public class DataBaseTodoItemDAO implements TodoItemDAO {
             var insertSql = "SELECT * FROM TODO_ITEM;";
             var statement = connection.createStatement();
             var resultSet = statement.executeQuery(insertSql);
-            Set<TodoItem> tasks = new HashSet<>();
+            var tasks = new HashSet<TodoItem>();
 
             while(resultSet.next()) {
                 var id = resultSet.getLong("ID");
                 var description = resultSet.getString("DESCRIPTION");
                 var createdAt = resultSet.getTimestamp("CREATED_AT").toLocalDateTime();
-                tasks.add(new TodoItem(id, description, createdAt));
+                var status = TodoItem.Status.valueOf(resultSet.getString("STATUS"));
+                tasks.add(new TodoItem(id, description, createdAt, status));
             }
             return tasks;
         } catch(SQLException e) {
